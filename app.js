@@ -153,122 +153,6 @@ function previewOf(body) {
 }
 
 /* ---------- 存储 ---------- */
-function seedRecipes() {
-  const mk = (id, date, md) => ({ id, markdown: md, created: new Date(date).getTime(), updated: new Date(date).getTime() });
-  return [
-    mk('s1', '2026-09-28', `---
-名称: 番茄炒蛋
-标签: 家常菜, 快手菜
-难度: 简单
-用时: 15 分钟
-日期: 2026-09-28
-成功指数: 5
----
-
-## 材料
-- 鸡蛋 3 个
-- 熟透番茄 2 个（约 400g）
-- 小葱 1 根
-- 白糖 1 小勺
-- 盐 适量
-- 食用油 2 勺
-
-## 步骤
-1. 番茄顶部划十字，开水烫 30 秒去皮，切滚刀块；鸡蛋加一小撮盐打散。
-2. 热锅倒 2 勺油，油温六成热（筷子插入冒小泡）时倒入蛋液。
-3. 边缘凝固、中间还微微流动时，用铲子轻轻推散成大块，八成熟就盛出来。
-4. 锅里留底油，下番茄中火翻炒 2 分钟，炒出沙。
-5. 加半碗水、1 小勺糖、适量盐，煮 1 分钟让汤汁变浓。
-6. 倒回鸡蛋翻匀，让蛋吸饱汤汁，30 秒后关火。
-7. 撒葱花出锅。
-
-## 心得
-- 蛋八成熟就盛出来，回锅才嫩；全熟再合体会变老。
-- 加糖是为了中和酸味，吃不出甜才算成功。
-- 汤汁留着拌饭，一绝。`),
-    mk('s2', '2026-10-03', `---
-名称: 可乐鸡翅
-标签: 家常菜, 招待菜, 荤菜
-难度: 简单
-用时: 30 分钟
-日期: 2026-10-03
-成功指数: 5
----
-
-## 材料
-- 鸡翅中 8 个
-- 可乐 1 罐（330ml）
-- 姜片 3 片
-- 料酒 1 勺
-- 生抽 2 勺
-- 老抽 半勺
-
-## 步骤
-1. 鸡翅正反各划两刀，冷水下锅加姜片、料酒，煮出浮沫后捞出洗净擦干。
-2. 少油中火，把鸡翅两面煎到金黄，每面约 2 分钟。
-3. 倒入整罐可乐，加生抽 2 勺、老抽半勺。
-4. 大火烧开转中小火，盖盖焖 15 分钟。
-5. 开盖大火收汁，不停把汁浇在鸡翅上，收到能挂住勺背即可。
-
-## 心得
-- 不用再加糖，可乐的甜度刚好；怕腻可以挤几滴柠檬汁。
-- 收汁是灵魂：汁变粘稠冒大泡时立刻关火，晚了会发苦。`),
-    mk('s3', '2026-10-08', `---
-名称: 蒜蓉西兰花
-标签: 素菜, 快手菜, 减脂
-难度: 简单
-用时: 10 分钟
-日期: 2026-10-08
-成功指数: 4
----
-
-## 材料
-- 西兰花 1 颗（约 400g）
-- 大蒜 5 瓣
-- 盐 1 小勺
-- 蚝油 1 勺
-- 食用油 适量
-
-## 步骤
-1. 西兰花剪成小朵，淡盐水泡 10 分钟。
-2. 水烧开加 1 小勺盐和几滴油，下西兰花焯 90 秒，捞出过凉水沥干。
-3. 热锅冷油下蒜末，小火煸 20 秒到微黄出香。
-4. 转大火下西兰花，加蚝油，快速翻炒 40 秒出锅。
-
-## 心得
-- 焯水时加盐和油，颜色绿得发亮；过凉水保持脆感。
-- 全程大火快炒，炒久了就软塌塌的。`),
-    mk('s4', '2026-10-11', `---
-名称: 紫菜蛋花汤
-标签: 汤羹, 快手菜
-难度: 简单
-用时: 10 分钟
-日期: 2026-10-11
-成功指数: 4
----
-
-## 材料
-- 紫菜 1 小块
-- 鸡蛋 2 个
-- 虾皮 1 小勺
-- 小葱 1 根
-- 香油 几滴
-- 盐、白胡椒粉 适量
-- 水淀粉 半碗
-
-## 步骤
-1. 紫菜撕小块冲一下水；鸡蛋打散备用。
-2. 锅中约 3 碗水烧开，下紫菜和虾皮煮 1 分钟。
-3. 转最小火，淋入水淀粉勾薄芡。
-4. 蛋液从高处绕圈细细淋入，等 5 秒再轻轻推开，蛋花会成片。
-5. 加盐、白胡椒粉，滴香油，撒葱花出锅。
-
-## 心得
-- 勾芡是蛋花成片的关键，不勾芡会散成絮。
-- 淋蛋液时火候要最小，水微沸就行。`),
-  ];
-}
-
 function load() {
   try {
     const raw = localStorage.getItem(LS_KEY);
@@ -277,12 +161,45 @@ function load() {
       if (Array.isArray(db.recipes)) return { recipes: db.recipes, checks: db.checks || {} };
     }
   } catch (e) { /* 坏数据就重来 */ }
-  return { recipes: seedRecipes(), checks: {} };
+  return { recipes: [], checks: {}, seeded: false };
 }
 
 let db = load();
 const save = () => localStorage.setItem(LS_KEY, JSON.stringify(db));
 save();
+
+const SEED_DIR = 'recipes';
+
+/* 首次打开：从仓库 recipes/ 静态文件加载示例菜谱（清单见 recipes/index.json） */
+async function seedFromStatic() {
+  if (db.seeded || db.recipes.length) return;
+  let manifest;
+  try {
+    const res = await fetch(`${SEED_DIR}/index.json`, { cache: 'no-cache' });
+    if (!res.ok) return;
+    manifest = await res.json();
+  } catch (e) { return; } /* file:// 下浏览器禁止本地 fetch：没有示例菜，不影响手动录入 */
+  if (!Array.isArray(manifest) || !manifest.length) return;
+  db.seeded = true;
+  save();
+  const items = await Promise.all(manifest.map(async (name) => {
+    try {
+      const res = await fetch(`${SEED_DIR}/${encodeURIComponent(name)}`, { cache: 'no-cache' });
+      if (!res.ok) return null;
+      const text = await res.text();
+      const p = parseRecipe(text);
+      const ts = p.updatedTs || Date.parse(p.date) || Date.now();
+      return { id: p.id || uid(), markdown: text, created: ts, updated: ts };
+    } catch (e) { return null; }
+  }));
+  const have = new Set(db.recipes.map((r) => r.id));
+  const toAdd = items.filter(Boolean).filter((r) => !have.has(r.id));
+  if (!toAdd.length) return;
+  db.recipes.push(...toAdd);
+  save();
+  renderTags();
+  renderList();
+}
 
 /* ---------- 列表 ---------- */
 const state = { q: '', tags: new Set() };
@@ -883,6 +800,7 @@ window.addEventListener('hashchange', () => {
 renderTags();
 renderList();
 updateGhBadge();
+seedFromStatic();
 (function initHash() {
   const m = location.hash.match(/^#r=(.+)$/);
   if (m) openDetail(decodeURIComponent(m[1]));

@@ -9,8 +9,8 @@
 任选其一：
 
 ```bash
-# 方式一：直接双击 index.html（支持 file:// 打开）
-# 方式二：起个本地服务
+# 方式一：直接双击 index.html（支持 file:// 打开，但浏览器禁止本地 fetch，首次看不到示例菜谱）
+# 方式二：起个本地服务（推荐）
 cd recipe-book
 python3 -m http.server 8412
 # 浏览器访问 http://127.0.0.1:8412/
@@ -93,9 +93,9 @@ recipe-book/
 ├── style.css           # 灶台瓷砖 × 青花蓝 × 朱砂印章
 ├── app.js              # 存储 / 模板解析 / 渲染 / 导入导出 / 烹饪模式
 ├── gh.js               # GitHub Contents API 同步（拉取/推送/删除/冲突合并）
-├── recipes/            # 菜谱存档目录（同步后一道菜一个 .md）
+├── recipes/            # 菜谱存档目录：内置示例是静态 .md（清单 index.json），同步后一道菜一个 .md
 ├── .github/workflows/pages.yml  # Pages 自动部署
 └── vendor/marked.min.js  # 本地化的 Markdown 渲染库（离线可用）
 ```
 
-首次打开会内置 4 道示例菜（番茄炒蛋、可乐鸡翅、蒜蓉西兰花、紫菜蛋花汤），不需要就在卡片上点进去删掉。
+内置的 4 道示例菜谱（番茄炒蛋、可乐鸡翅、蒜蓉西兰花、紫菜蛋花汤）就是 `recipes/` 目录下的静态 `.md` 文件，清单在 `recipes/index.json`，首次通过 http(s) 打开时自动加载。想修改默认菜谱直接编辑这些文件；在页面上删掉后不会再出现（有一次性标记）。
