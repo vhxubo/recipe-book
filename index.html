@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>灶间手账 · 只记做成功过的菜</title>
+<title>灶间手账 · 只记做过的菜</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23BF3B2B'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='KaiTi,serif'>灶</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,10 @@
 <header class="masthead">
   <div class="masthead-inner">
     <div class="masthead-title">
-      <div class="seal" aria-hidden="true"><span>成</span><span>功</span></div>
+      <div class="seal" aria-hidden="true"><span>灶</span><span>间</span></div>
       <div>
         <h1>灶间手账</h1>
-        <p class="masthead-sub">只收录亲手做<b>成功</b>过的菜 · 材料与步骤，做时翻得到</p>
+        <p class="masthead-sub">只收录亲手做过的菜 · 材料与步骤，做时翻得到</p>
       </div>
     </div>
     <p class="masthead-stats" id="mastStats"></p>
@@ -71,7 +71,6 @@
         <h2 class="dish-name" id="dTitle"></h2>
         <div class="meta-chips" id="dMeta"></div>
       </div>
-      <div class="stamp stamp-sm" aria-hidden="true">成功</div>
     </header>
     <div class="sheet-actions">
       <button class="btn btn-primary" id="btnCook">▶ 开始做</button>
@@ -113,11 +112,11 @@
         <label class="field">日期
           <input type="date" id="fDate">
         </label>
-        <label class="field field-wide">成功指数
+        <label class="field field-wide">评分
           <select id="fStars">
             <option value="5">★★★★★ 复刻不翻车</option>
             <option value="4">★★★★☆ 很满意</option>
-            <option value="3">★★★☆☆ 成功但有小瑕疵</option>
+            <option value="3">★★★☆☆ 小有瑕疵</option>
             <option value="2">★★☆☆☆ 勉强能吃</option>
             <option value="1">★☆☆☆☆ 下次还要改</option>
           </select>
@@ -132,7 +131,7 @@
       <div class="md-preview" id="mdPreview" hidden></div>
       <div class="form-foot">
         <button type="button" class="btn btn-ghost" id="btnCancelEditor">取消</button>
-        <button type="submit" class="btn btn-primary">盖上「成功」章，保存</button>
+        <button type="submit" class="btn btn-primary">保存</button>
       </div>
     </form>
   </article>
@@ -143,7 +142,7 @@
   <article class="sheet sheet-narrow" role="dialog" aria-modal="true">
     <button class="sheet-close" id="btnClosePaste" aria-label="关闭">×</button>
     <h2 class="dish-name">粘贴 Markdown 导入</h2>
-    <p class="eyebrow">支持带 frontmatter（名称/标签/难度/用时/日期/成功指数）的完整格式</p>
+    <p class="eyebrow">支持带 frontmatter（名称/标签/难度/用时/日期/评分）的完整格式</p>
     <textarea id="pasteArea" class="paste-area" spellcheck="false" placeholder="---&#10;名称: …&#10;标签: …&#10;---&#10;&#10;## 材料&#10;…"></textarea>
     <div class="form-foot">
       <button type="button" class="btn btn-ghost" id="btnCancelPaste">取消</button>

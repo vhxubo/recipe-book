@@ -269,26 +269,6 @@ main { max-width: 1080px; margin: 0 auto; padding: 26px 22px 60px; }
 .card-stars { color: var(--amber); letter-spacing: 1px; font-size: 12px; }
 .card-stars .dim { opacity: .28; }
 
-/* 卡角「成功」小章 */
-.stamp-corner {
-  position: absolute;
-  top: 12px; right: 12px;
-  width: 46px; height: 46px;
-  border: 2.5px solid var(--cinnabar);
-  border-radius: 7px;
-  color: var(--cinnabar);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--f-brush);
-  font-size: 19px;
-  line-height: 1.05;
-  transform: rotate(8deg);
-  opacity: .82;
-  user-select: none;
-  pointer-events: none;
-}
-
 .empty {
   text-align: center;
   color: var(--ink-soft);
@@ -374,31 +354,6 @@ main { max-width: 1080px; margin: 0 auto; padding: 26px 22px 60px; }
 .chip b { color: var(--ink); font-weight: 600; }
 .chip-stars { color: var(--amber); font-size: 13px; letter-spacing: 1px; }
 .chip-stars .dim { opacity: .28; }
-
-/* 详情页的印章 */
-.stamp {
-  flex: none;
-  width: 64px; height: 64px;
-  border: 3px solid var(--cinnabar);
-  border-radius: 9px;
-  color: var(--cinnabar);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--f-brush);
-  font-size: 25px;
-  line-height: 1.05;
-  transform: rotate(7deg);
-  opacity: .9;
-  animation: stamp-in .3s cubic-bezier(.2, 1.6, .4, 1);
-  user-select: none;
-}
-.stamp-sm { width: 58px; height: 58px; font-size: 23px; }
-@keyframes stamp-in {
-  0%   { transform: rotate(7deg) scale(1.8); opacity: 0; }
-  60%  { opacity: .95; }
-  100% { transform: rotate(7deg) scale(1); opacity: .9; }
-}
 
 .sheet-actions {
   display: flex;
@@ -797,7 +752,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 26px 22px 60px; }
 /* ---------- 打印 ---------- */
 @media print {
   body { background: #fff; }
-  .masthead, .toolbar, .sheet-actions, .sheet-close, .stamp, .overlay + .overlay, .foot, .toast { display: none !important; }
+  .masthead, .toolbar, .sheet-actions, .sheet-close, .overlay + .overlay, .foot, .toast { display: none !important; }
   .overlay { position: static; background: none; padding: 0; overflow: visible; }
   .sheet { box-shadow: none; border: none; max-width: none; padding: 0; }
   .detail-cols { grid-template-columns: 1fr; }

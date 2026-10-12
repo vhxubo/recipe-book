@@ -96,7 +96,7 @@ function serializeRecipe(f, body, extra = {}) {
   lines.push(`难度: ${f.level}`);
   if (f.time) lines.push(`用时: ${f.time}`);
   if (f.date) lines.push(`日期: ${f.date}`);
-  lines.push(`成功指数: ${f.stars}`);
+  lines.push(`评分: ${f.stars}`);
   if (extra.updatedTs) lines.push(`更新时间: ${new Date(extra.updatedTs).toISOString()}`);
   lines.push('---', '', body.trim(), '');
   return lines.join('\n');
@@ -235,10 +235,10 @@ function renderTags() {
 
 function renderStats() {
   const n = db.recipes.length;
-  if (!n) { $('#mastStats').textContent = '空空如也，等第一道成功的菜'; return; }
+  if (!n) { $('#mastStats').textContent = '空空如也，等第一道菜'; return; }
   const dates = db.recipes.map((r) => parseRecipe(r.markdown).date).filter(Boolean).sort();
   const last = dates.length ? fmtDate(dates[dates.length - 1]) : '';
-  $('#mastStats').textContent = `已收录 ${n} 道菜` + (last ? ` · 最近一次成功 ${last}` : '');
+  $('#mastStats').textContent = `已收录 ${n} 道菜` + (last ? ` · 最近一次 ${last}` : '');
 }
 
 function renderList() {
@@ -262,7 +262,6 @@ function renderList() {
     card.className = 'card';
     card.type = 'button';
     card.innerHTML = `
-      <span class="stamp-corner" aria-hidden="true">成功</span>
       <span class="card-name">${esc(p.name)}</span>
       <span class="card-tags">${p.tags.map((t) => `<span class="card-tag">${esc(t)}</span>`).join('')}</span>
       <span class="card-preview">${esc(previewOf(p.body))}</span>
@@ -361,7 +360,7 @@ function openDetail(id) {
   $('#dMeta').innerHTML = `
     <span class="chip">难度 <b>${esc(p.level)}</b></span>
     ${p.time ? `<span class="chip">用时 <b>${esc(p.time)}</b></span>` : ''}
-    ${p.date ? `<span class="chip">成功于 <b>${esc(fmtDate(p.date) || p.date)}</b></span>` : ''}
+    ${p.date ? `<span class="chip">日期 <b>${esc(fmtDate(p.date) || p.date)}</b></span>` : ''}
     <span class="chip chip-stars">${starsHtml(p.stars)}</span>`;
   const bodyEl = $('#detailBody');
   bodyEl.innerHTML = '';
@@ -453,7 +452,7 @@ $('#editorForm').addEventListener('submit', (e) => {
   editorReturnId = null;
   renderTags();
   renderList();
-  toast(isNew ? '盖上「成功」章，收录！🎉' : '已更新');
+  toast(isNew ? '收录！🎉' : '已更新');
   openDetail(id);
 });
 
@@ -526,7 +525,7 @@ function showTplDoc() {
 难度: 简单
 用时: 15 分钟
 日期: 2026-10-12
-成功指数: 5
+评分: 5
 ---
 
 ## 材料
@@ -539,7 +538,7 @@ function showTplDoc() {
 
 ## 心得
 - 成功的关键：……</pre>
-      <p>字段说明：<b>标签</b>用逗号分隔可写多个；<b>成功指数</b> 1–5；「材料」一节会自动变成可勾选的备菜清单，「步骤」一节配合「开始做」进入大字烹饪模式。</p>
+      <p>字段说明：<b>标签</b>用逗号分隔可写多个；<b>评分</b> 1–5；「材料」一节会自动变成可勾选的备菜清单，「步骤」一节配合「开始做」进入大字烹饪模式。</p>
       <div class="form-foot">
         <button class="btn btn-primary" data-copy>复制模板</button>
       </div>
