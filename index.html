@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>灶间手账 · 只记做成功过的菜</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23BF3B2B'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='KaiTi,serif'>灶</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="masthead-title">
+      <div class="seal" aria-hidden="true"><span>成</span><span>功</span></div>
+      <div>
+        <h1>灶间手账</h1>
+        <p class="masthead-sub">只收录亲手做<b>成功</b>过的菜 · 材料与步骤，做时翻得到</p>
+      </div>
+    </div>
+    <p class="masthead-stats" id="mastStats"></p>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search-wrap">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input type="search" id="searchInput" placeholder="搜菜名、标签或材料…" aria-label="搜索菜谱">
+    </div>
+    <div class="tag-row" id="tagRow" aria-label="按标签筛选"></div>
+    <div class="toolbar-actions">
+      <button class="btn btn-ghost" id="btnGh" title="GitHub 同步"><span class="gh-dot off" id="ghDot"></span>GitHub</button>
+      <button class="btn btn-ghost" id="btnData" title="导入 / 导出">备份 ⌄</button>
+      <button class="btn btn-primary" id="btnNew">＋ 记一道新菜</button>
+      <!-- GitHub 菜单（锚定在工具条按钮下） -->
+      <div class="menu-pop" id="ghMenu" hidden>
+        <p class="menu-note" id="ghMenuNote"></p>
+        <button id="btnSyncNow">⟳ 立即同步</button>
+        <button id="btnGhSettings">同步设置…</button>
+        <button id="btnGhOpen" hidden>在 GitHub 上查看 ↗</button>
+      </div>
+      <!-- 数据菜单（锚定在工具条按钮下） -->
+      <div class="menu-pop" id="dataMenu" hidden>
+        <button id="btnExportJson">导出全部数据（JSON 备份）</button>
+        <button id="btnImportJson">导入 JSON 备份</button>
+        <button id="btnImportMd">导入 Markdown 文件…</button>
+        <button id="btnImportPaste">粘贴 Markdown 导入</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="card-grid" id="cardGrid" aria-live="polite"></section>
+  <p class="empty" id="emptyHint" hidden>还没有记录。点右上角「记一道新菜」，照着模板填材料与步骤即可。</p>
+</main>
+
+<input type="file" id="fileInput" accept=".json,.md,.markdown,.txt" multiple hidden>
+
+<!-- 详情抽屉 -->
+<div class="overlay" id="detailOverlay" hidden>
+  <article class="sheet" role="dialog" aria-modal="true" aria-labelledby="dTitle">
+    <button class="sheet-close" id="btnCloseDetail" aria-label="关闭">×</button>
+    <header class="sheet-head">
+      <div class="sheet-head-main">
+        <p class="eyebrow" id="dEyebrow"></p>
+        <h2 class="dish-name" id="dTitle"></h2>
+        <div class="meta-chips" id="dMeta"></div>
+      </div>
+      <div class="stamp stamp-sm" aria-hidden="true">成功</div>
+    </header>
+    <div class="sheet-actions">
+      <button class="btn btn-primary" id="btnCook">▶ 开始做</button>
+      <button class="btn" id="btnEdit">编辑</button>
+      <button class="btn btn-ghost" id="btnCopyMd">复制 Markdown</button>
+      <button class="btn btn-ghost" id="btnDownloadMd">下载 .md</button>
+      <button class="btn btn-ghost btn-danger" id="btnDelete">删除</button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+  </article>
+</div>
+
+<!-- 编辑抽屉 -->
+<div class="overlay" id="editorOverlay" hidden>
+  <article class="sheet" role="dialog" aria-modal="true" aria-labelledby="eTitleText">
+    <button class="sheet-close" id="btnCloseEditor" aria-label="关闭">×</button>
+    <header class="sheet-head">
+      <div class="sheet-head-main">
+        <h2 class="dish-name" id="eTitleText">记一道新菜</h2>
+        <p class="eyebrow">填好基本信息，正文按模板写材料和步骤</p>
+      </div>
+    </header>
+    <form id="editorForm" autocomplete="off">
+      <div class="form-grid">
+        <label class="field field-wide">菜名<b>*</b>
+          <input type="text" id="fName" required placeholder="例如：番茄炒蛋">
+        </label>
+        <label class="field">标签
+          <input type="text" id="fTags" placeholder="家常菜, 快手菜（逗号分隔）">
+        </label>
+        <label class="field">难度
+          <select id="fLevel">
+            <option>简单</option><option>进阶</option><option>硬核</option>
+          </select>
+        </label>
+        <label class="field">用时
+          <input type="text" id="fTime" placeholder="例如：15 分钟">
+        </label>
+        <label class="field">日期
+          <input type="date" id="fDate">
+        </label>
+        <label class="field field-wide">成功指数
+          <select id="fStars">
+            <option value="5">★★★★★ 复刻不翻车</option>
+            <option value="4">★★★★☆ 很满意</option>
+            <option value="3">★★★☆☆ 成功但有小瑕疵</option>
+            <option value="2">★★☆☆☆ 勉强能吃</option>
+            <option value="1">★☆☆☆☆ 下次还要改</option>
+          </select>
+        </label>
+      </div>
+      <div class="editor-tabs" role="tablist">
+        <button type="button" class="tab is-active" id="tabWrite" role="tab" aria-selected="true">✎ 写</button>
+        <button type="button" class="tab" id="tabPreview" role="tab" aria-selected="false">👁 预览</button>
+        <button type="button" class="btn btn-ghost btn-mini" id="btnResetTpl" title="恢复模板（清空正文）">重置为模板</button>
+      </div>
+      <textarea id="fBody" spellcheck="false" aria-label="正文（Markdown）"></textarea>
+      <div class="md-preview" id="mdPreview" hidden></div>
+      <div class="form-foot">
+        <button type="button" class="btn btn-ghost" id="btnCancelEditor">取消</button>
+        <button type="submit" class="btn btn-primary">盖上「成功」章，保存</button>
+      </div>
+    </form>
+  </article>
+</div>
+
+<!-- 粘贴导入 -->
+<div class="overlay" id="pasteOverlay" hidden>
+  <article class="sheet sheet-narrow" role="dialog" aria-modal="true">
+    <button class="sheet-close" id="btnClosePaste" aria-label="关闭">×</button>
+    <h2 class="dish-name">粘贴 Markdown 导入</h2>
+    <p class="eyebrow">支持带 frontmatter（名称/标签/难度/用时/日期/成功指数）的完整格式</p>
+    <textarea id="pasteArea" class="paste-area" spellcheck="false" placeholder="---&#10;名称: …&#10;标签: …&#10;---&#10;&#10;## 材料&#10;…"></textarea>
+    <div class="form-foot">
+      <button type="button" class="btn btn-ghost" id="btnCancelPaste">取消</button>
+      <button type="button" class="btn btn-primary" id="btnDoPaste">导入</button>
+    </div>
+  </article>
+</div>
+
+<!-- GitHub 同步设置 -->
+<div class="overlay" id="ghOverlay" hidden>
+  <article class="sheet sheet-narrow" role="dialog" aria-modal="true">
+    <button class="sheet-close" id="btnCloseGh" aria-label="关闭">×</button>
+    <h2 class="dish-name">GitHub 同步</h2>
+    <p class="eyebrow">菜谱存成 <b>recipes/</b> 目录下的 Markdown 文件，一道菜一个，随本仓库一起版本化</p>
+    <div class="form-grid form-grid-1">
+      <label class="field">仓库（本项目在 GitHub 上的 owner/repo）
+        <input id="ghRepo" placeholder="vhxubo/recipe-book">
+      </label>
+      <label class="field">目录（仓库内存放菜谱的文件夹）
+        <input id="ghDir" placeholder="recipes">
+      </label>
+      <label class="field">分支
+        <input id="ghBranch" placeholder="main">
+      </label>
+      <label class="field">Token（需要该仓库 Contents 读写权限；留空则只能读公开仓库）
+        <input id="ghToken" type="password" placeholder="github_pat_…">
+      </label>
+    </div>
+    <p class="gh-hint">先把本项目推上 GitHub，再回到这里填仓库地址。Token 生成：GitHub → Settings → Developer settings → Fine-grained tokens，只勾选本仓库的 <b>Contents: Read and write</b>。Token 只保存在本机浏览器，不会写进菜谱数据。</p>
+    <p class="gh-status" id="ghStatus"></p>
+    <div class="form-foot">
+      <button class="btn btn-ghost btn-danger" id="ghDisconnect" hidden>断开</button>
+      <button class="btn" id="ghTest">测试连接</button>
+      <button class="btn btn-primary" id="ghSave">保存并同步</button>
+    </div>
+  </article>
+</div>
+
+<!-- 烹饪模式 -->
+<div class="cook" id="cookOverlay" hidden>
+  <div class="cook-inner">
+    <p class="cook-eyebrow" id="cookDishName"></p>
+    <p class="cook-step-no" id="cookStepNo"></p>
+    <p class="cook-step-text" id="cookStepText"></p>
+    <p class="cook-tip" id="cookTip">空格 / 点击画面 → 下一步</p>
+    <div class="cook-progress" id="cookProgress" aria-hidden="true"></div>
+    <button class="cook-nav cook-prev" id="cookPrev" aria-label="上一步">‹</button>
+    <button class="cook-nav cook-next" id="cookNext" aria-label="下一步">›</button>
+    <button class="cook-exit" id="cookExit">退出（Esc）</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<footer class="foot">
+  数据存本机浏览器，可同步为 GitHub 仓库里的 Markdown 文件 · <button class="linklike" id="btnTemplateDoc">查看录入模板</button>
+</footer>
+
+<script src="vendor/marked.min.js"></script>
+<script src="gh.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
