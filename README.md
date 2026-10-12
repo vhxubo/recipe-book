@@ -75,6 +75,16 @@ frontmatter 字段：`标签` 逗号分隔可多个；`成功指数` 1–5；不
 
 > 注意：localStorage 按"打开方式"隔离，固定用同一种方式打开（如一直用 `127.0.0.1:8412`）。清浏览器数据前先确认已同步过，或用「备份 → 导出 JSON」。
 
+## 在线访问：GitHub Pages
+
+仓库带了一个 Pages 部署工作流（`.github/workflows/pages.yml`）：push 到 `main` 自动把整站发布到 **https://vhxubo.github.io/recipe-book/**，`workflow_dispatch` 可手动触发。
+
+首次使用需在仓库 **Settings → Pages → Build and deployment → Source** 选 **GitHub Actions**（若首次运行报 Pages 未启用，检查这里）。之后每次推送——包括菜谱同步产生的提交——都会自动重新发布，线上永远是最新的菜谱。
+
+推荐把 Pages 地址当作日常入口：页面是相对路径引用，部署在子路径 `/recipe-book/` 下无需任何配置；换设备直接开网页，配好同步后大家看到同一份数据。
+
+> 注意：Pages 域名（vhxubo.github.io）和本地 127.0.0.1 是不同的 localStorage 空间，两边各自配置一次同步即可指向同一份仓库数据。
+
 ## 文件结构
 
 ```
@@ -84,6 +94,7 @@ recipe-book/
 ├── app.js              # 存储 / 模板解析 / 渲染 / 导入导出 / 烹饪模式
 ├── gh.js               # GitHub Contents API 同步（拉取/推送/删除/冲突合并）
 ├── recipes/            # 菜谱存档目录（同步后一道菜一个 .md）
+├── .github/workflows/pages.yml  # Pages 自动部署
 └── vendor/marked.min.js  # 本地化的 Markdown 渲染库（离线可用）
 ```
 

@@ -798,7 +798,6 @@ function updateGhBadge() {
   const info = GH.stateInfo();
   $('#ghDot').className = 'gh-dot ' + info.state;
   $('#ghMenuNote').textContent = info.note;
-  $('#btnGhOpen').hidden = !info.cfg;
 }
 
 GH.initBridge({

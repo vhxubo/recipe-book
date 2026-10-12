@@ -9,6 +9,7 @@
 
 const GH = (() => {
   const LS = 'recipeBook.gh.v1';
+  const DEFAULT_REPO_URL = 'https://github.com/vhxubo/recipe-book';
   const DEFAULTS = { cfg: null, shas: {}, dirty: [], tombstones: [], lastSync: 0 };
   let st = load();
   let bridge = null;
@@ -318,7 +319,7 @@ const GH = (() => {
     },
 
     webUrl() {
-      if (!st.cfg) return '';
+      if (!st.cfg) return DEFAULT_REPO_URL;
       return `https://github.com/${st.cfg.repo}/tree/${branch()}/${dir()}`;
     },
 
